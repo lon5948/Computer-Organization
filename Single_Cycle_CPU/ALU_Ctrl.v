@@ -6,7 +6,7 @@ module ALU_Ctrl(
     input       [2-1:0] ALUOp,
     output      [4-1:0] ALU_Ctrl_o
 );
-reg [3:0]out;
+reg [3:0] out;
 wire [2:0] func3;
 assign func3 = instr[2:0];
 assign ALU_Ctrl_o = out;

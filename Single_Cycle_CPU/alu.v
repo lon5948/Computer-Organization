@@ -30,7 +30,7 @@ always@(*) begin
             4'b0111: // slt
                 begin
                     result[31:1] <= 0;
-                    result[0] <= (a < b);
+                    result[0] <= (src1 < src2);
                 end
 		endcase
 	end
