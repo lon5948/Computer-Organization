@@ -39,7 +39,7 @@ wire [32-1:0] PcPlus4;
 wire [32-1:0] MUX_ALUSrcA_o;
 wire [32-1:0] Adder_PCReg_o;
 wire [32-1:0] MUX_ALUSrcB_o;
-wire [32-1:0] ALU_Result;
+wire [32-1:0] alu_result;
 wire [32-1:0] Data_Memory_o;
 wire [32-1:0] WriteBack0_o;
 
@@ -132,12 +132,12 @@ alu alu(
     .src2(MUX_ALUSrcB_o),
     .ALU_control(ALUControlOut),
     .Zero(Zero),
-    .result(ALU_Result)
+    .result(alu_result)
 );
 
 Data_Memory Data_Memory(
     .clk_i(clk_i),
-    .addr_i(ALU_Result),
+    .addr_i(alu_result),
     .data_i(RTdata_o),
     .MemRead_i(MemRead),
     .MemWrite_i(MemWrite),
@@ -145,7 +145,7 @@ Data_Memory Data_Memory(
 );
 
 MUX_2to1 MUX_WriteBack0(
-    .data0_i(ALU_Result),
+    .data0_i(alu_result),
     .data1_i(Data_Memory_o),
     .select_i(WriteBack0),
     .data_o(WriteBack0_o)
