@@ -15,17 +15,17 @@ module Decoder(
     output  [2-1:0]     ALUOp
 );
 
-assign RegWrite = (instr_1[5:2] == 4'b1000)? 0:1 ; // store and branch should be 0
-assign Branch = (instr_1[6:0]==7'b1100011)? 1:0; // only branch
-assign Jump = instr_1[2];  // jal or jalr 
-assign WriteBack1 = instr_1[2];  // jal or jalr
-assign WriteBack0 = (instr_1[6:0]==7'b0000011)? 1:0; // only load
-assign MemRead = (instr_1[6:0]==7'b0000011)? 1:0; // only load
-assign MemWrite =  (instr_1[6:0]==7'b0100011)? 1:0; // only store
-assign ALUSrcA = (instr_1[6:0]==7'b1100111)? 1:0; // only jalr (src1 + immd)
-assign ALUSrcB = (instr_1[6:5]==2'b00||instr_1[6:4]==3'b010)? 1:0; // addi, load, store
+assign RegWrite = (instr_i[5:2] == 4'b1000)? 0:1 ; // store and branch should be 0
+assign Branch = (instr_i[6:0]==7'b1100011)? 1:0; // only branch
+assign Jump = instr_i[2];  // jal or jalr 
+assign WriteBack1 = instr_i[2];  // jal or jalr
+assign WriteBack0 = (instr_i[6:0]==7'b0000011)? 1:0; // only load
+assign MemRead = (instr_i[6:0]==7'b0000011)? 1:0; // only load
+assign MemWrite =  (instr_i[6:0]==7'b0100011)? 1:0; // only store
+assign ALUSrcA = (instr_i[6:0]==7'b1100111)? 1:0; // only jalr (src1 + immd)
+assign ALUSrcB = (instr_i[6:5]==2'b00||instr_i[6:4]==3'b010)? 1:0; // addi, load, store
 // lw,sw:00,branch:01,r-type:10,addi:11
-assign ALUOp =  (instr_1[6:5]==2'b11)? 2'b01 : (instr_1[5:4]==2'b11)? 2'b10 : (instr_1[4]==1'b1)? 2'b11 : 2'b00;
+assign ALUOp =  (instr_i[6:5]==2'b11)? 2'b01 : (instr_i[5:4]==2'b11)? 2'b10 : (instr_1[4]==1'b1)? 2'b11 : 2'b00;
 
 endmodule
 
