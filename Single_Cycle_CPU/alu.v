@@ -9,11 +9,12 @@ module alu(
     output                  Zero          // 1 bit when the output is 0, zero must be set (output)
 );
 
+assign Zero = ~(|result);
+
 always@(*) begin
 	if(~rst_n)
 	begin 
 		result <= 0;
-		Zero <= 0;
 	end
 	else
 	begin
@@ -32,7 +33,6 @@ always@(*) begin
                     result[0] <= (a < b);
                 end
 		endcase
-		zero <= ~(|result);
 	end
 end
 endmodule
