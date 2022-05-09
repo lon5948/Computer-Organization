@@ -8,4 +8,4 @@ NYCU 110 下 / professor: 陳添福
 - 32-bit ALU
 
 ### lab 3
-- single-cycle CPU
+- single-cycle CPU (simple version)
