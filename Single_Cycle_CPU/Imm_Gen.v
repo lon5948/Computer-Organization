@@ -24,9 +24,9 @@ always @(*) begin
         7'b0100011: // S-type (sw)
             Imm_Gen_o <= {  {21{instr_i[31]}} ,instr_i[30:25],instr_i[11:7] };
         7'b1100011: // B-type (branch)
-            Imm_Gen_o <= { {20{instr_i[31]}}, instr_i[7] ,instr_i[30:25] , instr_i[11:8] ,1'b0 };
+            Imm_Gen_o <= { {20{instr_i[31]}},instr_i[7],instr_i[30:25],instr_i[11:8],1'b0 };
         7'b1101111: // J-type (jal)
-            Imm_Gen_o <= {  { 12{instr_i[31]} }, instr_i[19:12], instr_i[20] , instr_i[30:21] , 1'b0 };
+            Imm_Gen_o <= {  {12{instr_i[31]}},instr_i[19:12],instr_i[20],instr_i[30:21],1'b0 };
     endcase
 
 end

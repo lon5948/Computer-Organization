@@ -21,7 +21,7 @@ always@(*) begin
 				4'b1000: out <= 4'b0110; // sub
 				4'b0111: out <= 4'b0000; // and
 				4'b0110: out <= 4'b0001; // or
-				4'b0010: out<= 4'b0111; // slt
+				4'b0010: out <= 4'b0111; // slt
 			endcase
         2'b11: out <= 4'b0010; // addi
 	endcase
