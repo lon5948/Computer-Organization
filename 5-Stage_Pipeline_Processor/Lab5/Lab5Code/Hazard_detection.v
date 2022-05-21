@@ -8,7 +8,7 @@ module Hazard_detection(
     output reg IFID_write,
     output reg control_output_select
 );
-/* Write your code HERE */
+
 always@(*)begin
     if(IDEXE_memRead and ((IDEXE_regRd==IFID_regRs)or(IDEXE_regRd==IFID_regRt)))begin
         PC_write <= 1b'0;
