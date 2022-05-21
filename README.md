@@ -14,5 +14,5 @@ NYCU 110 下 / professor: 陳添福
 ### lab 4
 - single cycle CPU
 
-### lab 4
+### lab 5
 - 5-Stage Pipeline Processor
