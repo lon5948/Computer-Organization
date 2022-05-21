@@ -81,46 +81,133 @@ wire [31:0] MEMWB_ALUresult_o;
 wire [4:0]  MEMWB_Instr_11_7_o;
 wire [31:0] MEMWB_PC_Add4_o;
 
-
+//ruby add
+wire [31:0] IFID_Instr_i; 
+wire isEqual;
+wire immm;
 // IF
 MUX_2to1 MUX_PCSrc(
+    .data0_i(PC_Add_Immediate),
+    .data1_i(PC_Add4),
+    .select_i(IFID_Flush),
+    .data_o(pc_i)
 );
 
 ProgramCounter PC(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .PCWrite(PC_write),
+    .pc_i(PC_i),
+    .pc_o(PC_o)
 );
 
 Adder PC_plus_4_Adder(
+    .src1_i(PC_o),
+    .src2_i(2b'100),
+    .sum_o(PC_Add4)
 );
 
 Instr_Memory IM(
+    .addr_i(PC_o),
+    .instr_o(IFID_Instr_i)
 );
 
 IFID_register IFtoID(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .flush(IFID_Flush),
+    .IFID_write(IFID_Write),
+    .address_i(),////////////////////
+    .instr_i(IFID_Instr_i),
+    .pc_add4_i(PC_o),//////////////so strange
+    .address_o(),/////////////////////
+    .instr_o(IFID_Instr_o),
+    .pc_add4_o(IFID_PC_Add4_o)
 );
 
 // ID
 Hazard_detection Hazard_detection_obj(
+    .IFID_regRs(IFID_Instr_o[19:15]),
+    .IFID_regRt(IFID_Instr_o[24:20]),
+    .IDEXE_regRd(),/////////////
+    .IDEXE_memRead(IDEXE_Mem_o),
+    .PC_write(PC_write),
+    .IFID_write(IFID_Write),
+    .control_output_select(MUXControl)
 );
 
 MUX_2to1 MUX_control(
+    .data0_i(),////////////////
+    .data1_i(),
+    .select_i(MUXControl),
+    .data_o
 );
 
 Decoder Decoder(
+    .instr_i(IFID_Instr_o[6:0]),
+    .branch_i(isEqual),
+    .Branch(Branch),
+    .ALUSrc(ALUSrc),
+    .RegWrite(RegWrite),
+    .ALUOp(ALUOp),
+    .MemRead(MemRead),
+    .MemWrite(MemWrite),
+    .MemtoReg(MemtoReg),
+    .Jump(Jump)
 );
 
 Reg_File RF(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .RSaddr_i(IFID_Instr_o[19:15]),
+    .RTaddr_i(IFID_Instr_o[24:20]),
+    .RDaddr_i(),///////////////back
+    .RDdata_i(),///////////////back
+    .RegWrite_i(RegWrite),
+    .RSdata_o(RSdata_o),
+    .RTdata_o(RTdata_o),
+    .branch_o(isEqual)
 );
 
 Imm_Gen ImmGen(
+    .instr_i(IFID_Instr_o[31:0]),
+    .Imm_Gen_o(Imm_Gen_o)
 );
 
 Shift_Left_1 SL1(
+    .data_i(Imm_Gen_o),
+    .data_o(imm)
 );
 
 Adder Branch_Adder(
+    .src1_i(imm),
+    .src2_i(PC_o),
+    .sum_o(PC_Add_Immediate)
 );
 
 IDEXE_register IDtoEXE(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .instr_i(IFID_Instr_o),
+    .WB_i(RegWrite),///////////////
+    .Mem_i(),
+    .Exe_i,
+    .data1_i(RSdata_o),
+    .data2_i(RTdata_o),
+    .immgen_i(Imm_Gen_o),
+    .alu_ctrl_instr({IFID_Instr_o[30],IFID_Instr_o[14:12]}),
+    .WBreg_i(),///////////////
+    .pc_add4_i(IFID_PC_Add4_o),
+    .instr_o(IDEXE_Instr_o),
+    .WB_o(IDEXE_WB_o),
+    .Mem_o(IDEXE_Mem_o),
+    .Exe_o(IDEXE_Exe_o),
+    .data1_o(IDEXE_RSdata_o),
+    .data2_o(IDEXE_RTdata_o),
+    .immgen_o(IDEXE_ImmGen_o),
+    .alu_ctrl_input(IDEXE_Instr_30_14_12_o),
+    .WBreg_o(IDEXE_Instr_11_7_o),
+    .pc_add4_o(IDEXE_PC_add4_o)
 );
 
 // EXE
