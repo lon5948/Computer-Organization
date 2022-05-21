@@ -9,7 +9,8 @@ module Reg_File(
     input       [32-1:0] RDdata_i,
     input                RegWrite_i,
     output wire [32-1:0] RSdata_o,
-    output wire [32-1:0] RTdata_o
+    output wire [32-1:0] RTdata_o,
+    output reg branch_o
 );
 
 reg signed [32-1:0] Reg_File [0:32-1];
@@ -33,6 +34,10 @@ always @(negedge clk_i) begin
             Reg_File[RDaddr_i] <= RDdata_i;
         else
             Reg_File[RDaddr_i] <= Reg_File[RDaddr_i];
+        if(Reg_File[RSaddr_i]==Reg_File[RTaddr_i])
+            branch_o <= 1;
+        else
+            branch_o <= 0;
     end
 end
 

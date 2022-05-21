@@ -8,7 +8,7 @@ module MUX_3to1(
     output  reg [32-1:0] data_o
 );
 
-assign data_o = (select_i==2'b00)?data0_i: (select_i==2'b00)?data1_i:data2_i;
+assign data_o = (select_i==2'b00)?data0_i: (select_i==2'b01)?data1_i:data2_i;
 
 endmodule
 

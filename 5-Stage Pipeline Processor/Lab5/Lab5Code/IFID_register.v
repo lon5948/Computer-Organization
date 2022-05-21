@@ -13,4 +13,16 @@ module IFID_register (
     output reg [31:0] pc_add4_o
 );
 /* Write your code HERE */
+always@(posedge clk_i)begin
+    if(~rst_i || ~IFID_write || flush)begin
+        address_o <= 32b'0;
+        instr_o <= 32b'0;
+        pc_add4_o <= 43b'0;
+    end
+    else begin
+        address_o <= address_i;
+        instr_o <= instr_i;
+        pc_add4_o <= pc_add4_i;
+    end
+end
 endmodule
