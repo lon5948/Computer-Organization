@@ -31,7 +31,7 @@ always@(*)begin
     ALUSrc <= (opcode[6:5]==2'b00||opcode[6:4]==3'b010)? 1:0; // addi, load, store
     // lw,sw:00,branch:01,r-type:10,addi:11
     ALUOp <=  (opcode[6:5]==2'b11)? 2'b01 : (opcode[5:4]==2'b11)? 2'b10 : (opcode[4]==1'b1)? 2'b11 : 2'b00;
-    Flush <= Branch | Jump;
+    Flush <= Branch || Jump;
 end
 endmodule
 

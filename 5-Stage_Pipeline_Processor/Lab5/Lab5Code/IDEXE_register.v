@@ -27,16 +27,16 @@ module IDEXE_register (
 /* Write your code HERE */
 always@(posedge clk_i)begin
     if(~rst_i )begin
-        instr_o <= 32'b0;
-        WB_o <= 3'b0;
-        Mem_o <= 2'b0;
-        Exe_o <= 3'b0;
-        data1_o <= 32'b0;
-        data2_o <= 32'b0;
-        immgen_o <= 32'b0;
-        alu_ctrl_input <= 4'b0;
-        WBreg_o <= 5'b0;
-        pc_add4_o <= 32'b0;
+        instr_o <= 32'b0000_0000_0000_0000_0000_0000_0001_0011;
+        WB_o <= 0;
+        Mem_o <= 0;
+        Exe_o <= 0;
+        data1_o <= 0;
+        data2_o <= 0;
+        immgen_o <= 0;
+        alu_ctrl_input <= 0;
+        WBreg_o <= 0;
+        pc_add4_o <= 0;
     end
     else begin
         instr_o <= instr_i;

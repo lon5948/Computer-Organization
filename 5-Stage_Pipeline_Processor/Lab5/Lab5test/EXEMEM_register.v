@@ -25,7 +25,7 @@ always@(posedge clk_i) begin
     
     if(~rst_i) 
     begin
-        instr_o <= 0;
+        instr_o <= 32'b0000_0000_0000_0000_0000_0000_0001_0011;
         WB_o <= 0;
         Mem_o <= 0;
         zero_o <= 0;

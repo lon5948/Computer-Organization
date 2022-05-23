@@ -138,11 +138,12 @@ Hazard_detection Hazard_detection_obj(
 
 MUX_2to1 MUX_control(
     .data0_i({{24{1'b0}},MemtoReg,RegWrite,Jump,MemRead,MemWrite,ALUOp,ALUSrc}),
-    .data1_i(32'b0),
+    .data1_i({{24{1'b0}},8'b0000110}),
     .select_i(MUXControl),
     .data_o(MUX_control_o)
 );
 
+assign Branch_zero = (RSdata_o==RTdata_o)? 1'b1:1'b0;
 Decoder Decoder(
     .instr_i(IFID_Instr_o),
     .branch_i(Branch_zero),
@@ -166,8 +167,7 @@ Reg_File RF(
     .RDdata_i(MUXMemtoReg_o),
     .RegWrite_i(MEMWB_WB_o[1]),
     .RSdata_o(RSdata_o),
-    .RTdata_o(RTdata_o),
-    .branch_o(Branch_zero)
+    .RTdata_o(RTdata_o)
 );
 
 Imm_Gen ImmGen(
@@ -224,8 +224,8 @@ ForwardingUnit FWUnit(
     .IDEXE_RS2(IDEXE_Instr_o[24:20]),
     .EXEMEM_RD(EXEMEM_Instr_11_7_o),
     .MEMWB_RD(MEMWB_Instr_11_7_o),
-    .EXEMEM_RegWrite(EXEMEM_WB_o[1:0]),
-    .MEMWB_RegWrite(MEMWB_WB_o[1:0]),
+    .EXEMEM_RegWrite(EXEMEM_WB_o[1]),
+    .MEMWB_RegWrite(MEMWB_WB_o[1]),
     .ForwardA(ForwardA),
     .ForwardB(ForwardB)
 );
@@ -269,7 +269,7 @@ EXEMEM_register EXEtoMEM(
 	.Mem_i(IDEXE_Mem_o),
 	.zero_i(ALU_zero),
 	.alu_ans_i(ALUResult),
-    .rtdata_i(ALUSrc2_o),
+    .rtdata_i(ALUSrc2_o), //IDEXE_RTdata_o
 	.WBreg_i(IDEXE_Instr_11_7_o),
 	.pc_add4_i(IDEXE_PC_add4_o),
 

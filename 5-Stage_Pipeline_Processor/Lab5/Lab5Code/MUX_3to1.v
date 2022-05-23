@@ -9,7 +9,12 @@ module MUX_3to1(
 );
 
 always@(*) begin
-    data_o <= (select_i==2'b00)?data0_i: (select_i==2'b01)?data1_i:data2_i;
+    if(select_i==2'b00)
+        data_o <= data0_i;
+    else if(select_i==2'b01)
+        data_o <= data1_i;
+    else if(select_i==2'b10)
+        data_o <= data2_i;
 end
 endmodule
 
