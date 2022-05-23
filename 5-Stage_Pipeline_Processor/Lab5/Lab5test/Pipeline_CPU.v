@@ -83,6 +83,7 @@ wire [31:0] MEMWB_PC_Add4_o;
 
 //ruby add
 wire [31:0] IFID_Instr_i; 
+
 // IF
 MUX_2to1 MUX_PCSrc(
     .data0_i(PC_Add_Immediate),
@@ -181,7 +182,7 @@ Shift_Left_1 SL1(
 
 Adder Branch_Adder(
     .src1_i(SL1_o),
-    .src2_i(PC_o),
+    .src2_i(IFID_PC_o),
     .sum_o(PC_Add_Immediate)
 );
 
@@ -212,8 +213,8 @@ IDEXE_register IDtoEXE(
 
 // EXE
 MUX_2to1 MUX_ALUSrc(
-    .data0_i(RTdata_o),
-    .data1_i(Imm_Gen_o),
+    .data0_i(IDEXE_RTdata_o),
+    .data1_i(IDEXE_ImmGen_o),
     .select_i(IDEXE_Exe_o[0]),
     .data_o(MUXALUSrc_o)
 );
@@ -221,7 +222,7 @@ MUX_2to1 MUX_ALUSrc(
 ForwardingUnit FWUnit(
     .IDEXE_RS1(IDEXE_Instr_o[19:15]),
     .IDEXE_RS2(IDEXE_Instr_o[24:20]),
-    .EXEMEM_RD(IDEXE_Instr_11_7_o),
+    .EXEMEM_RD(EXEMEM_Instr_11_7_o),
     .MEMWB_RD(MEMWB_Instr_11_7_o),
     .EXEMEM_RegWrite(EXEMEM_WB_o[1:0]),
     .MEMWB_RegWrite(MEMWB_WB_o[1:0]),
@@ -297,7 +298,7 @@ MEMWB_register MEMtoWB(
     .rst_i(rst_i),
     .WB_i(EXEMEM_WB_o),
     .DM_i(DM_o),
-    .alu_ans_i(EXEMEM_RTdata_o),
+    .alu_ans_i(EXEMEM_ALUResult_o),
     .WBreg_i(EXEMEM_Instr_11_7_o),
     .pc_add4_i(EXEMEM_PC_Add4_o),
 
@@ -310,8 +311,8 @@ MEMWB_register MEMtoWB(
 
 // WB
 MUX_2to1 MUX_MemtoReg(
-    .data0_i(MEMWB_ALUresult_o),
-    .data1_i(MEMWB_DM_o),
+    .data0_i(MEMWB_DM_o),
+    .data1_i(MEMWB_ALUresult_o),
     .select_i(MEMWB_WB_o[2]),
     .data_o(MUXMemtoReg_o)
 );

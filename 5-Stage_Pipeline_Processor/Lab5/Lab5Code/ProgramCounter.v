@@ -10,7 +10,7 @@ module ProgramCounter(
 
 //Main function
 always @(posedge clk_i) begin
-    if(~rst_i)
+    if(~rst_i || PCWrite==1'b0)
         pc_o <= 0;
     else if(PCWrite)
         pc_o <= pc_i;
