@@ -15,6 +15,11 @@ always@(*)begin
         IFID_write <= 1'b0;
         control_output_select <= 1'b1;
     end
+    else begin
+        PC_write <= 1'b1;
+        IFID_write <= 1'b1;
+        control_output_select <= 1'b0;
+    end
 end
 endmodule
 
