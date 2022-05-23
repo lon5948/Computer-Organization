@@ -163,7 +163,7 @@ Reg_File RF(
     .RTaddr_i(IFID_Instr_o[24:20]),
     .RDaddr_i(MEMWB_Instr_11_7_o),
     .RDdata_i(MUXMemtoReg_o),
-    .RegWrite_i(RegWrite),
+    .RegWrite_i(MEMWB_WB_o[1]),
     .RSdata_o(RSdata_o),
     .RTdata_o(RTdata_o),
     .branch_o(Branch_zero)
@@ -214,7 +214,7 @@ IDEXE_register IDtoEXE(
 MUX_2to1 MUX_ALUSrc(
     .data0_i(RTdata_o),
     .data1_i(Imm_Gen_o),
-    .select_i(ALUSrc),
+    .select_i(IDEXE_Exe_o[0]),
     .data_o(MUXALUSrc_o)
 );
 
@@ -247,7 +247,7 @@ MUX_3to1 MUX_ALU_src2(
 
 ALU_Ctrl ALU_Ctrl(
     .instr(IDEXE_Instr_30_14_12_o),
-    .ALUOp(ALUOp),
+    .ALUOp(IDEXE_Exe_o[2:1]),
     .ALU_Ctrl_o(ALU_Ctrl_o)
 );
 
@@ -287,8 +287,8 @@ Data_Memory Data_Memory(
     .clk_i(clk_i),
     .addr_i(EXEMEM_ALUResult_o),
     .data_i(EXEMEM_RTdata_o),
-    .MemRead_i(MemRead),
-    .MemWrite_i(MemWrite),
+    .MemRead_i(EXEMEM_Mem_o[1]),
+    .MemWrite_i(EXEMEM_Mem_o[0]),
     .data_o(DM_o)
 );
 
@@ -296,8 +296,8 @@ MEMWB_register MEMtoWB(
     .clk_i(clk_i),
     .rst_i(rst_i),
     .WB_i(EXEMEM_WB_o),
-    .DM_i(EXEMEM_RTdata_o),
-    .alu_ans_i(EXEMEM_ALUResult_o),
+    .DM_i(DM_o),
+    .alu_ans_i(EXEMEM_RTdata_o),
     .WBreg_i(EXEMEM_Instr_11_7_o),
     .pc_add4_i(EXEMEM_PC_Add4_o),
 
@@ -312,7 +312,7 @@ MEMWB_register MEMtoWB(
 MUX_2to1 MUX_MemtoReg(
     .data0_i(MEMWB_ALUresult_o),
     .data1_i(MEMWB_DM_o),
-    .select_i(MemtoReg),
+    .select_i(MEMWB_WB_o[2]),
     .data_o(MUXMemtoReg_o)
 );
 

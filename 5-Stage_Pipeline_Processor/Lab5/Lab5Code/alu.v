@@ -9,12 +9,11 @@ module alu(
     output reg              zero           // 1 bit when the output is 0, zero must be set (output)
 );
 
-assign Zero = ~(|result);
-
 always@(*) begin
 	if(~rst_n)
 	begin 
 		result <= 0;
+        zero <= 0;
 	end
 	else
 	begin
@@ -33,6 +32,7 @@ always@(*) begin
                     result[0] <= (src1 < src2);
                 end
 		endcase
+        zero <= ~(|result);
 	end
 end
 endmodule

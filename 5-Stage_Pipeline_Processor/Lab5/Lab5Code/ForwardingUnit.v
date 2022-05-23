@@ -12,11 +12,11 @@ module ForwardingUnit (
 
 always@(*) begin
     
-    if(EXEMEM_RegWrite && EXEMEM_RD!=0 && IDEXE_RS1==EXEMEM_RD)
+    if((EXEMEM_RegWrite==2'b01) && (EXEMEM_RD!=0) && (IDEXE_RS1==EXEMEM_RD))
     begin
         ForwardA = 2'b10; 
     end
-    else if(MEMWB_RegWrite && EXEMEM_RD!=0 && IDEXE_RS1==MEMWB_RD)
+    else if((MEMWB_RegWrite==2'b01) && (EXEMEM_RD!=0) && (IDEXE_RS1==MEMWB_RD))
     begin
         ForwardA = 2'b01; 
     end
@@ -25,11 +25,11 @@ always@(*) begin
         ForwardA = 2'b00; 
     end
 
-    if(EXEMEM_RegWrite && EXEMEM_RD!=0 && IDEXE_RS2==EXEMEM_RD)
+    if((EXEMEM_RegWrite==2'b01) && (EXEMEM_RD!=0) && (IDEXE_RS2==EXEMEM_RD))
     begin
         ForwardB = 2'b10; 
     end
-    else if(MEMWB_RegWrite && EXEMEM_RD!=0 && IDEXE_RS2==MEMWB_RD)
+    else if((MEMWB_RegWrite==2'b01) && (EXEMEM_RD!=0) && (IDEXE_RS2==MEMWB_RD))
     begin
         ForwardB = 2'b01; 
     end
