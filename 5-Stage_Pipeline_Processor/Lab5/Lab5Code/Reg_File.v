@@ -10,7 +10,7 @@ module Reg_File(
     input                RegWrite_i,
     output wire [32-1:0] RSdata_o,
     output wire [32-1:0] RTdata_o,
-    output reg branch_o
+    output reg           branch_o
 );
 
 reg signed [32-1:0] Reg_File [0:32-1];
@@ -28,6 +28,7 @@ always @(negedge clk_i) begin
         Reg_File[20] <= 0; Reg_File[21] <= 0; Reg_File[22] <= 0; Reg_File[23] <= 0;
         Reg_File[24] <= 0; Reg_File[25] <= 0; Reg_File[26] <= 0; Reg_File[27] <= 0;
         Reg_File[28] <= 0; Reg_File[29] <= 0; Reg_File[30] <= 0; Reg_File[31] <= 0;
+        branch_o <= 0;
     end
     else begin
         if(RegWrite_i)

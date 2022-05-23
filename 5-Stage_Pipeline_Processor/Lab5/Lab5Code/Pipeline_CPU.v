@@ -20,7 +20,7 @@ wire [31:0] RTdata_o;
 wire [31:0] Imm_Gen_o;
 wire [31:0] ALUSrc1_o;
 wire [31:0] ALUSrc2_o;
-wire [7:0]  MUX_control_o;
+wire [31:0]  MUX_control_o;
 
 wire [31:0] PC_Add_Immediate;
 wire [1:0] ALUOp;
@@ -137,8 +137,8 @@ Hazard_detection Hazard_detection_obj(
 );
 
 MUX_2to1 MUX_control(
-    .data0_i({MemtoReg,RegWrite,Jump,MemRead,MemWrite,ALUOp,ALUSrc}),
-    .data1_i(8'b0),
+    .data0_i({{24{1'b0}},MemtoReg,RegWrite,Jump,MemRead,MemWrite,ALUOp,ALUSrc}),
+    .data1_i(32'b0),
     .select_i(MUXControl),
     .data_o(MUX_control_o)
 );
@@ -171,7 +171,7 @@ Reg_File RF(
 );
 
 Imm_Gen ImmGen(
-    .instr_i(IFID_Instr_o[31:0]),
+    .instr_i(IFID_Instr_o),
     .Imm_Gen_o(Imm_Gen_o)
 );
 
@@ -271,7 +271,7 @@ EXEMEM_register EXEtoMEM(
 	.alu_ans_i(ALUResult),
     .rtdata_i(ALUSrc2_o),
 	.WBreg_i(IDEXE_Instr_11_7_o),
-	.pc_add4_i(PC_Add4),
+	.pc_add4_i(IDEXE_PC_add4_o),
 
 	.instr_o(EXEMEM_Instr_o),
 	.WB_o(EXEMEM_WB_o),
@@ -310,10 +310,11 @@ MEMWB_register MEMtoWB(
 );
 
 // WB
-MUX_2to1 MUX_MemtoReg(
-    .data0_i(MEMWB_DM_o),
-    .data1_i(MEMWB_ALUresult_o),
-    .select_i(MEMWB_WB_o[2]),
+MUX_3to1 MUX_MemtoReg(
+    .data0_i(MEMWB_ALUresult_o),
+    .data1_i(MEMWB_DM_o),
+    .data2_i(MEMWB_PC_Add4_o),
+    .select_i({MEMWB_WB_o[0],MEMWB_WB_o[2]}),
     .data_o(MUXMemtoReg_o)
 );
 
