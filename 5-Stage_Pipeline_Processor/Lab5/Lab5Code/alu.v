@@ -18,7 +18,7 @@ always@(*) begin
 	else
 	begin
 		case(ALU_control)
-			4'b0010: // add
+			4'b0010: // add,addi
                 result <= src1 + src2;
             4'b0110: // sub
                 result <= src1 - src2;
@@ -26,11 +26,19 @@ always@(*) begin
                 result <= src1 & src2;
             4'b0001: // or
                 result <= src1 | src2;
-            4'b0111: // slt
+            4'b0101: // xor
+                result <= src1 ^ src2;
+            4'b0111: // slt,slti
                 begin
                     result[31:1] <= 0;
                     result[0] <= (src1 < src2);
                 end
+            4'b0100:
+				result <= src1 << src2; // sll,slli
+            4'b1000:
+				result <= src1 >>> src2; //sra
+            4'b1001:
+				result <= src1 >> src2; //srli
 		endcase
         zero <= ~(|result);
 	end

@@ -138,7 +138,7 @@ Hazard_detection Hazard_detection_obj(
 
 MUX_2to1 MUX_control(
     .data0_i({{24{1'b0}},MemtoReg,RegWrite,Jump,MemRead,MemWrite,ALUOp,ALUSrc}),
-    .data1_i({{24{1'b0}},8'b0000110}),
+    .data1_i(32'b0),
     .select_i(MUXControl),
     .data_o(MUX_control_o)
 );
@@ -269,7 +269,7 @@ EXEMEM_register EXEtoMEM(
 	.Mem_i(IDEXE_Mem_o),
 	.zero_i(ALU_zero),
 	.alu_ans_i(ALUResult),
-    .rtdata_i(ALUSrc2_o), //IDEXE_RTdata_o
+    .rtdata_i(ALUSrc2_o), //
 	.WBreg_i(IDEXE_Instr_11_7_o),
 	.pc_add4_i(IDEXE_PC_add4_o),
 
