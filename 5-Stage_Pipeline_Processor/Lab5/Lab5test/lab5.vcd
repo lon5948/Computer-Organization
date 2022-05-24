@@ -1,5 +1,5 @@
 $date
-	Tue May 24 02:00:57 2022
+	Tue May 24 10:22:42 2022
 $end
 $version
 	Icarus Verilog
@@ -498,7 +498,6 @@ b0 ~"
 b1000111 1
 b1000111 p"
 b0 [
-b0 p
 b0 d"
 b0 ##
 b0 ;
@@ -606,6 +605,7 @@ b0 J
 b0 ="
 b0 X"
 b0 C
+b0 p
 b0 <"
 b0 W"
 b0 D
@@ -1963,7 +1963,6 @@ bx +
 bx m"
 bx q"
 bx [
-bx p
 bx d"
 bx ##
 bx ^
@@ -2010,6 +2009,7 @@ bx H
 bx a
 bx :"
 bx C
+bx p
 bx <"
 bx W"
 bx D
