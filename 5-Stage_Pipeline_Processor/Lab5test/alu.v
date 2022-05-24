@@ -33,12 +33,12 @@ always@(*) begin
                     result[31:1] <= 0;
                     result[0] <= (src1 < src2);
                 end
-            4'b0100:
-				result <= src1 << src2; // sll,slli
-            4'b1000:
-				result <= src1 >>> src2; //sra
-            4'b1001:
-				result <= src1 >> src2; //srli
+            4'b0100: // sll,slli
+				result <= src1 << src2; 
+            4'b1000: //sra
+				result <= src1 >>> src2; 
+            4'b1001: //srli
+				result <= src1 >> src2; 
 		endcase
         zero <= ~(|result);
 	end
