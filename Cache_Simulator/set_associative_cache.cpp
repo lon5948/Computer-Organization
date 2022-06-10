@@ -8,15 +8,15 @@
 #include <sstream>
 #include <bitset>
 using namespace std;
+
 string hextobin(string hex);
-float set_associative(string filename, int way, int block_size, int cache_size)
-{
-    int total_num = -1;
+
+float set_associative(string filename, int way, int block_size, int cache_size){
+    int total_num = 0;
     int hit_num = 0;
 
-    /*write your code HERE*/
     long long int NumOfBlock = cache_size/block_size;
-    long long int NumOfSet = NumOfBlock/4;
+    long long int NumOfSet = NumOfBlock/way;
     int indexbit = log2(NumOfSet);
     int offsetbit = log2(block_size);
     int tagbit = 32-indexbit-offsetbit;
@@ -26,43 +26,30 @@ float set_associative(string filename, int way, int block_size, int cache_size)
 
     map<int, list<long long int> > cache;
     while (getline(input_file, line)) {
-        cout << line << endl;
         line.insert(line.begin(),8-line.length(),'0');
         string bin = hextobin(line);
-        long long int index = stoi(bin.substr(tagbit, indexbit),0,2);
+        int index = stoi(bin.substr(tagbit, indexbit),0,2);
         long long int tag = stoi(bin.substr(0, tagbit),0,2);
         map<int,list<long long int>>::iterator it;
-        cout << "index" << index << endl;
         it = cache.find(index);
-        int done=0;
+        bool done=0;
         list<long long int>::iterator lit;
-        cout << bin << endl;
         if(it!=cache.end()){
-            //cout << it->second.size() << endl;
-            for(lit=it->second.begin();lit!=it->second.end();++lit){
-                cout << distance(it->second.begin(),lit)  << endl;
-                cout << distance(it->second.begin(),it->second.end())  << endl;
-                cout << it->second.size() << endl;
+            for(lit=it->second.begin();lit!=it->second.end();lit++){
                 if(*lit==tag){
-                    //cout <<"g" << endl;
                     hit_num++;
-                    if(it->second.size()==4){ //remove LRU
-                        it->second.erase(lit);
-                        cout << "size" << it->second.size() << endl;
-                    }
+                    it->second.erase(lit);
                     it->second.push_back(tag);
-                    done=1;
+                    done=true;
+                    break;
                 }
-                cout << "h?" << endl;
             }
-            //cout << "here" << endl;
-            if(done==0){ //miss
-                it->second.push_back(tag);
-                if(it->second.size()==4){ //remove LRU
+            if(done==false){ //miss
+                if(it->second.size()==way){ //remove LRU
                     it->second.pop_front();
                 }
+                it->second.push_back(tag);
             }
-            //cout << "A" << endl;
         }
         else{ //miss
             list<long long int> temp;
@@ -70,7 +57,6 @@ float set_associative(string filename, int way, int block_size, int cache_size)
             cache[index] = temp;
         }
         total_num++;
-        //cout << "b" << endl;
     }
     return (float)hit_num/total_num;
 }

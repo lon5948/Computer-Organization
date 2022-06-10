@@ -11,7 +11,7 @@ using namespace std;
 string hex2bin(string hex);
 
 float direct_mapped(string filename, int block_size, int cache_size) {
-    int total_num = -1;
+    int total_num = 0;
     int hit_num = 0;
 
     int offset = log2(block_size);
