@@ -3,7 +3,7 @@
 #include <fstream>
 #include <cmath>
 #include <map>
-#include <vector>
+#include <list>
 using namespace std;
 
 float set_associative(string filename, int way, int block_size, int cache_size)
@@ -21,36 +21,39 @@ float set_associative(string filename, int way, int block_size, int cache_size)
     ifstream input_file(filename);
     string line;
 
-    map<int, vector<int> > cache;
+    map<int, list<int> > cache;
     while (getline(input_file, line)) {
         line.insert(line.begin(),8-line.length(),'0');
         string bin = hex2bin(line);
         int index = stoi(bin.substr(tagbit, indexbit),0,2);
         int tag = stoi(bin.substr(0, tagbit),0,2);
-        map<int,vector<int>>::iterator it;
+        map<int,list<int>>::iterator it;
         it = cache.find(index);
         int done=0;
+        list<int>::iterator lit;
         if(it!=cache.end()){
-            for(int i=0;i<4;i++){
-                if((it->second)[i]==tag){
+            for(lit=it->second.begin();lit!=it->second.end();lit++){
+                if(*lit==tag){
                     hit_num++;
+                    it->second.erase(lit);
+                    it->second.push_back(tag);
                     done=1;
                 }
-                else{
-                    //
+            }
+            if(done==0){
+                it->second.push_back(tag);
+                if(it->second.size()==4){ //remove LRU
+                    it->second.push_back(tag);
                 }
             }
         }
-        else{
-            vector<int> temp;
+        else{ //miss
+            list<int> temp;
             temp.resize(4);
             temp.push_back(tag);
             cache[index] = temp;
-            done=1;
         }
-        if(done==0){
-
-        }
+        total_num++;
     }
     return (float)hit_num/total_num;
 }
