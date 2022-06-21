@@ -16,3 +16,6 @@ NYCU 110 下 / professor: 陳添福
 
 ### lab 5
 - 5-Stage Pipeline Processor
+
+### lab 6
+- Cache Simulator
